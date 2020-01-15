@@ -6,37 +6,36 @@ public class ArrayStorage {
     int size = 0;
 
     void clear() {
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++) {
             storage[i] = null;
+        }
         size = 0;
     }
 
-    void save(Resume r) {
-        storage[size] = r;
+    void save(Resume resume) {
+        storage[size] = resume;
         size++;
     }
 
     Resume get(String uuid) {
         for (int i = 0; i < size; i++) {
             Resume resume = storage[i];
-            if (resume.uuid == uuid)
+            if (resume.uuid.equals(uuid)) {
                 return resume;
+            }
         }
         return null;
     }
 
     void delete(String uuid) {
-        int indexToDelete = -1;
         for (int i = 0; i < size; i++) {
-            if (storage[i].uuid == uuid) {
-                indexToDelete = i;
+            if (storage[i].uuid.equals(uuid)) {
+                // перемещаем последний элемент в массиве на место удаляемого
+                storage[i] = storage[size - 1];
+                storage[size - 1] = null;
+                size--;
                 break;
             }
-        }
-        if (indexToDelete >= 0) {
-            for (int i = indexToDelete; i < size; i++)
-                storage[i] = storage[i + 1];
-            size--;
         }
     }
 
@@ -45,9 +44,7 @@ public class ArrayStorage {
      */
     Resume[] getAll() {
         Resume[] resumes = new Resume[size];
-        for (int i = 0; i < size; i++) {
-            resumes[i] = storage[i];
-        }
+        System.arraycopy(storage, 0, resumes, 0, size);
         return resumes;
     }
 
